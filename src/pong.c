@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
+#include <time.h>
+#include <stdlib.h>
 
 // Input without pressing enter
 void turn_off_canon(void);
@@ -45,6 +47,7 @@ int add_point_1_player(int ball_y, int score_1);
 int who_win(int score_1, int score_2);
 
 int main() {
+    srand(time(NULL)); // Initialization, should only be called once.
     turn_off_canon();  // Input without pressing enter
 
     const int WIDTH = 80;
@@ -115,10 +118,15 @@ int main() {
             ball_y = 40;
             left_racket_x = 12;
             right_racket_x = 12;
+            c = '*';
+            dx = (rand() % 2 ? 1 : -1);
+            dy = (rand() % 2 ? 1 : -1);
 
             // Updating the score
             score_1 = tmp_score_1;
             score_2 = tmp_score_2;
+
+            usleep(300000);  // Delay before the start of the next feed
         }
 
         // Responsible for the winner
@@ -132,7 +140,7 @@ int main() {
             break;  // End game loop
         }
 
-        usleep(50000);  // Delay
+        usleep(40000);  // Delay
 
         // Drawing
         draw(WIDTH,
@@ -235,6 +243,8 @@ int check_coincide_with_rackets(int ball_y,
     else
         return dy;
 }
+
+
 
 // Check for crossing the ball with the top/bottom wall
 int check_coincide_with_top_bottom_wall(int ball_x, int dx) {
